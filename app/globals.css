@@ -1,0 +1,188 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@theme inline {
+  --font-sans: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-display-face), var(--font-body), sans-serif;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-sky: var(--sky);
+  --color-ink: var(--ink);
+  --color-panel: var(--panel);
+  --color-good: var(--good);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+}
+
+:root {
+  --background: #0b1f4a;
+  --foreground: #ffffff;
+  --primary: #e8322f;
+  --primary-foreground: #ffffff;
+  --accent: #ffd23f;
+  --accent-foreground: #3a2200;
+  --sky: #1ea1e6;
+  --ink: #0b1f4a;
+  --panel: #ffffff;
+  --good: #3ec45a;
+  --muted-foreground: #5a6b8c;
+  --border: #0b1f4a;
+}
+
+html,
+body {
+  height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
+  background: var(--background);
+  color: var(--foreground);
+  -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+/* Chunky outlined game lettering, like the reference's cartoon HUD. */
+.text-outline {
+  -webkit-text-stroke: 0.08em var(--ink);
+  paint-order: stroke fill;
+  text-shadow: 0 0.08em 0 var(--ink);
+}
+
+.text-outline-thin {
+  -webkit-text-stroke: 0.05em var(--ink);
+  paint-order: stroke fill;
+  text-shadow: 0 0.05em 0 var(--ink);
+}
+
+/* Glossy pill button with a pressed-in bottom lip. */
+.btn-game {
+  position: relative;
+  border: 3px solid var(--ink);
+  box-shadow:
+    0 5px 0 var(--ink),
+    inset 0 -6px 0 rgb(0 0 0 / 0.18),
+    inset 0 4px 0 rgb(255 255 255 / 0.35);
+  transition:
+    transform 80ms ease,
+    box-shadow 80ms ease;
+}
+
+.btn-game:active {
+  transform: translateY(4px);
+  box-shadow:
+    0 1px 0 var(--ink),
+    inset 0 -3px 0 rgb(0 0 0 / 0.18),
+    inset 0 3px 0 rgb(255 255 255 / 0.35);
+}
+
+.btn-game:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.panel-game {
+  border: 4px solid var(--ink);
+  box-shadow: 0 8px 0 var(--ink);
+}
+
+.bg-stripes {
+  background-image: repeating-linear-gradient(-45deg, #1ea1e6 0 28px, #34b3f2 28px 56px);
+}
+
+@keyframes pop-in {
+  0% {
+    transform: scale(0.3);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.15);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes rise-fade {
+  0% {
+    transform: translateY(10px) scale(0.8);
+    opacity: 0;
+  }
+  15% {
+    transform: translateY(0) scale(1.05);
+    opacity: 1;
+  }
+  75% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-30px) scale(1);
+    opacity: 0;
+  }
+}
+
+@keyframes banner-slide {
+  0% {
+    transform: translateX(-120%);
+  }
+  12%,
+  82% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(120%);
+  }
+}
+
+@keyframes wipe-flash {
+  0% {
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes bob {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-3deg);
+  }
+  50% {
+    transform: translateY(-8px) rotate(3deg);
+  }
+}
+
+.animate-pop-in {
+  animation: pop-in 420ms cubic-bezier(0.2, 1.4, 0.4, 1) both;
+}
+.animate-rise-fade {
+  animation: rise-fade 1.5s ease-out both;
+}
+.animate-banner {
+  animation: banner-slide 2.6s cubic-bezier(0.3, 1, 0.4, 1) both;
+}
+.animate-wipe {
+  animation: wipe-flash 1.6s ease-out both;
+}
+.animate-bob {
+  animation: bob 2.4s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-bob,
+  .animate-banner,
+  .animate-pop-in,
+  .animate-rise-fade {
+    animation-duration: 1ms;
+  }
+}
