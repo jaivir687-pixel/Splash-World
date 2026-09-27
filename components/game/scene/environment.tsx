@@ -62,7 +62,7 @@ function skyMaterial(theme: Theme, octaves: number, forEnv = false) {
 }
 
 function Sky({ theme, hq }: { theme: Theme; hq: boolean }) {
-  const mat = useMemo(() => skyMaterial(theme, hq ? 4 : 2), [theme, hq])
+  const mat = useMemo(() => skyMaterial(theme, hq ? 3 : 2), [theme, hq])
   const ref = useRef<THREE.Mesh>(null)
   useFrame(({ camera }) => {
     ref.current?.position.copy(camera.position)
@@ -160,7 +160,7 @@ function Lights({ theme, shadows }: { theme: Theme; shadows: boolean }) {
         intensity={theme.sunIntensity * 1.1}
         target={target}
         castShadow={shadows}
-        shadow-mapSize={[2048, 2048]}
+        shadow-mapSize={[1024, 1024]}
         shadow-camera-left={-22}
         shadow-camera-right={22}
         shadow-camera-top={16}

@@ -354,10 +354,10 @@ function buildKnockout(): LevelDef {
     id: 'knockout',
     index: 1,
     name: 'Canyon Knockout',
-    subtitle: 'Knockout - 5 attempts',
+    subtitle: 'Knockout - 25 attempts', // 👈 Updated to 25
     round: 'knockout',
     theme: 'desert',
-    lives: 5,
+    lives: 25, // 👈 Updated to 25
     targetTime: 75,
     qualifySpots: 3,
     contestants: [

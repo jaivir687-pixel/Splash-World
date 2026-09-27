@@ -15,10 +15,10 @@ class InputManager {
 
   private down = (e: KeyboardEvent) => {
     const k = e.code
-    if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Space'].includes(k)) e.preventDefault()
+    if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Space', 'Enter', 'NumpadEnter'].includes(k)) e.preventDefault()
     if (e.repeat) return
     this.keys.add(k)
-    if (k === 'Space' || k === 'ArrowUp' || k === 'KeyW' || k === 'KeyK') this.jumpQueued = true
+    if (k === 'Space' || k === 'ArrowUp' || k === 'KeyW' || k === 'KeyK' || k === 'Enter' || k === 'NumpadEnter') this.jumpQueued = true
     if (k === 'ArrowDown' || k === 'KeyS' || k === 'ShiftLeft' || k === 'KeyJ') this.duckQueued = true
     if (k === 'Escape' || k === 'KeyP') this.onPause?.()
     if (k === 'KeyR') this.onRestart?.()
@@ -65,7 +65,15 @@ class InputManager {
   }
 
   get jumpHeld() {
-    return this.touchJump || this.keys.has('Space') || this.keys.has('ArrowUp') || this.keys.has('KeyW') || this.keys.has('KeyK')
+    return (
+      this.touchJump ||
+      this.keys.has('Space') ||
+      this.keys.has('ArrowUp') ||
+      this.keys.has('KeyW') ||
+      this.keys.has('KeyK') ||
+      this.keys.has('Enter') ||
+      this.keys.has('NumpadEnter')
+    )
   }
 
   get duckHeld() {

@@ -1,7 +1,7 @@
 'use client'
 
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
-import { Bloom, EffectComposer, N8AO, SMAA, ToneMapping, Vignette } from '@react-three/postprocessing'
+import { Bloom, EffectComposer, ToneMapping, Vignette } from '@react-three/postprocessing'
 import { ToneMappingMode } from 'postprocessing'
 import { Suspense, useRef } from 'react'
 import * as THREE from 'three'
@@ -25,7 +25,7 @@ function EngineTicker() {
 /**
  * Dynamic resolution: if frames run long for a sustained period the render
  * scale steps down (and back up when there's headroom) so weak Android GPUs
- * hold a playable framerate without the player touching settings.
+ * hold a locked 60 FPS without the player touching settings.
  */
 function ResolutionGovernor({ min, max }: { min: number; max: number }) {
   const setDpr = useThree((s) => s.setDpr)
@@ -35,17 +35,17 @@ function ResolutionGovernor({ min, max }: { min: number; max: number }) {
     s.acc += dt
     s.frames++
     s.cool -= dt
-    if (s.acc < 1.5) return
+    if (s.acc < 1.0) return
     const avg = s.acc / s.frames
     s.acc = 0
     s.frames = 0
     if (s.cool > 0) return
     let next = s.dpr
-    if (avg > 1 / 45) next = Math.max(min, s.dpr - 0.25)
-    else if (avg < 1 / 58) next = Math.min(max, s.dpr + 0.125)
+    if (avg > 1 / 55) next = Math.max(min, s.dpr - 0.15)
+    else if (avg < 1 / 58) next = Math.min(max, s.dpr + 0.1)
     if (next !== s.dpr) {
       s.dpr = next
-      s.cool = 2
+      s.cool = 1.5
       setDpr(next)
     }
   })
@@ -72,11 +72,9 @@ function World({ hq }: { hq: boolean }) {
 function PostFx() {
   return (
     <EffectComposer multisampling={0} enableNormalPass={false}>
-      <N8AO halfRes aoRadius={1.1} intensity={1.6} distanceFalloff={0.6} quality="performance" />
-      <Bloom mipmapBlur intensity={0.45} luminanceThreshold={0.92} luminanceSmoothing={0.2} />
+      <Bloom mipmapBlur intensity={0.4} luminanceThreshold={0.92} luminanceSmoothing={0.2} />
       <ToneMapping mode={ToneMappingMode.ACES_FILMIC} />
       <Vignette offset={0.32} darkness={0.42} />
-      <SMAA />
     </EffectComposer>
   )
 }
@@ -84,14 +82,20 @@ function PostFx() {
 export function GameCanvas() {
   const quality = useGameStore((s) => s.save.settings.quality)
   const high = quality === 'high'
-  const maxDpr = typeof window === 'undefined' ? 1 : Math.min(window.devicePixelRatio || 1, high ? 2 : 1.25)
+  const maxDpr = typeof window === 'undefined' ? 1 : Math.min(window.devicePixelRatio || 1, high ? 1.5 : 1.0)
   return (
     <Canvas
       key={quality}
       className="!absolute inset-0 touch-none"
-      shadows={high ? { type: THREE.PCFShadowMap } : false}
+      shadows={high ? { type: THREE.BasicShadowMap } : false}
       dpr={maxDpr}
-      gl={{ antialias: false, powerPreference: 'high-performance', stencil: false, depth: true }}
+      gl={{
+        antialias: false,
+        powerPreference: 'high-performance',
+        stencil: false,
+        depth: true,
+        precision: 'mediump'
+      }}
       camera={{ fov: 50, near: 0.3, far: 600, position: [0, 5, 12] }}
       onCreated={({ gl }) => {
         gl.toneMapping = THREE.ACESFilmicToneMapping
@@ -103,7 +107,7 @@ export function GameCanvas() {
         <World hq={high} />
         <CameraRig />
         {high && <PostFx />}
-        <ResolutionGovernor min={high ? 0.85 : 0.6} max={maxDpr} />
+        <ResolutionGovernor min={high ? 0.75 : 0.6} max={maxDpr} />
       </Suspense>
     </Canvas>
   )

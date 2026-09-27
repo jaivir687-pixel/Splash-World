@@ -92,7 +92,7 @@ function Terrain({ lay, theme, hq }: { lay: Layout; theme: Theme; hq: boolean })
   const geo = useMemo(() => {
     const W = lay.len + 440
     const D = 420
-    const g = new THREE.PlaneGeometry(W, D, hq ? 140 : 90, hq ? 90 : 56)
+    const g = new THREE.PlaneGeometry(W, D, hq ? 96 : 60, hq ? 60 : 40)
     g.rotateX(-Math.PI / 2)
     g.translate(lay.cx, 0, 0)
     const pos = g.attributes.position as THREE.BufferAttribute
@@ -340,7 +340,7 @@ function Plants({ lay, theme, hq }: { lay: Layout; theme: Theme; hq: boolean }) 
     const rand = mulberry32(lay.len * 7 + 1)
     const out: { x: number; z: number; s: number; r: number }[] = []
     const zStandBack = -(POOL.halfDepth + RIM + DECK_W + 8)
-    for (let i = 0; i < (hq ? 90 : 55); i++) {
+    for (let i = 0; i < (hq ? 65 : 40); i++) {
       const front = i % 4 === 0
       const x = lay.x0 - 50 + rand() * (lay.len + 100)
       const z = front ? POOL.halfDepth + RIM + DECK_W + 12 + rand() * 40 : zStandBack - 3 - rand() * 70

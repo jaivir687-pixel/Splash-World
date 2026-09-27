@@ -103,8 +103,8 @@ function makePuffLayer(max: number, blending: THREE.Blending) {
 }
 
 export function Effects({ theme, hq }: { theme: Theme; hq: boolean }) {
-  const MAX_CHUNKS = hq ? 260 : 140
-  const MAX_PUFFS = hq ? 160 : 80
+  const MAX_CHUNKS = hq ? 180 : 120
+  const MAX_PUFFS = hq ? 100 : 60
   const scale = usePointScale()
   const chunkMesh = useRef<THREE.InstancedMesh>(null)
   const cursor = useRef(fxCursor())
@@ -361,7 +361,7 @@ export function Effects({ theme, hq }: { theme: Theme; hq: boolean }) {
 
 /** Ambient atmosphere: pollen (park), blown sand (desert), sparkles (studio). */
 function Motes({ theme, hq }: { theme: Theme; hq: boolean }) {
-  const N = hq ? 140 : 50
+  const N = hq ? 75 : 40
   const scale = usePointScale()
   const BOX = 22
   const layer = useMemo(() => makePuffLayer(N, theme.night ? THREE.AdditiveBlending : THREE.NormalBlending), [N, theme])
